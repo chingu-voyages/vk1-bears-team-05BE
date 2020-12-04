@@ -3,13 +3,13 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-import SetupProfile from "./components/pages/SetupProfile";
+import EditProfilePage from "./components/pages/EditProfilePage";
 
 const App = () => {
   return (
     <div>
       <Header />
-      <SetupProfile />
+      <EditProfilePage />
       <Footer />
       <script
         src='https://unpkg.com/react/umd/react.production.min.js'
