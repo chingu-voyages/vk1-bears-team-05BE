@@ -1,18 +1,65 @@
-import React from 'react';
-import './App.css';
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import Body from "./components/Body";
-
+import React, { useState } from 'react';
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import SignInPage from "./components/pages/SignIn";
+import ForgotPW from "./components/pages/ForgotPW";
+import Home from "./components/pages/Home/Home"
 
 const App = () => {
+
+
+  // manual user
+  const adminUser = {
+    name: "Admin",
+    email: "admin@admin.com",
+    password: "admin123"
+  }
+
+  const [user, setUser] = useState({name: "", email: ""});
+  const [error, setError] = useState("");
+
+  const SignIn = details => {
+    // console.log(details);
+
+    if (details.email === adminUser.email && details.password === adminUser.password){
+      // console.log("Logged in");
+      setUser({
+        name: details.name,
+        email: details.email
+      });
+    } else {
+      // console.log("Details do not match!");
+      setError("Details do not match!");
+    }
+
+  }
+
+  const Logout = () => {
+    setUser({ name: "", email: "" });
+  }
+
   return (
     <div>
       <Header />
-      <Body />
+      <div>
+        {(user.email !== "") ? (
+          // <div className="welcome">
+          //   <h2>Welcome, <span>{user.name}</span></h2>
+          //   <button onClick={Logout}>Logout</button>
+          // </div>
+
+          //successful sign in
+          <Home/>
+          ) : (
+          <SignInPage SignIn={SignIn} error={error} />
+        )}  
+      </div>
+      
       <Footer />
-    </div> 
-   );
-}
+    </div>
+  );
+};
 
 export default App;
