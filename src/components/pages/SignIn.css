@@ -5,48 +5,50 @@
   font-family: "Roboto", "Rubik";
 }
 
-.registerPage > section {
+.SignInPage {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 104px 16px;
+  padding: 50px 16px;
 }
 
-.registerPage > section > div {
+.SignInBox {
   width: 360px;
+  height: 443px;
   margin: 0 auto;
 }
 
-.registerPage h2 {
+.SignInBox h1 {
+  font-family: "Rubik";
   text-align: center;
-  font-family: "Roboto";
-  font-weight: 700;
-  font-size: 2.5rem;
-  line-height: 48px;
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 43px;
   color: #131415;
-  margin-bottom: 40px;
 }
 
 .formLabel {
   font-family: "Rubik";
   font-weight: 500;
-  font-size: 0.87rem;
+  font-size: 14px;
   line-height: 16px;
   color: #131415;
 }
 
-.passwordLabel {
+.formSub {
+  font-family: "Roboto";
   font-weight: 400;
-  font-size: 0.87rem;
-  line-height: 20px;
-  color: #454a4d;
+  font-size: 14px;
+  color: #131415;
 }
 
-.termsLabel {
+.formLink {
   font-weight: 400;
-  line-height: 26px;
-  color: #454a4d;
-  margin-top: 11px;
-  margin-bottom: 19px;
+  font-size: 14px;
+}
+
+.formLink:hover {
+  text-decoration: none;
+  color: #d73728;
 }
 
 .customButton {
@@ -65,11 +67,4 @@
 .customButton:hover {
   background-color: #d73728;
   border-color: #d73728;
-}
-
-.hasAccount {
-  margin-top: 40px;
-  font-weight: 400;
-  line-height: 26px;
-  text-align: center;
 }
