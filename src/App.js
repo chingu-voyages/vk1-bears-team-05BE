@@ -9,6 +9,8 @@ import SignInPage from "./components/pages/SignIn";
 import ForgotPW from "./components/pages/ForgotPW";
 import Home from "./components/pages/Home/Home"
 import Register from "./components/pages/Register"
+import EditProfilePage from "./components/pages/EditProfilePage"
+
 
 
 const App = () => {
@@ -24,6 +26,7 @@ const App = () => {
       <Register/>
       <ForgotPW/>
       <SetupProfile />
+      <EditProfilePage />
       <Footer />
 
       <script
