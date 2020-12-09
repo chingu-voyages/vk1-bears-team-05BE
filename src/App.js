@@ -1,5 +1,6 @@
 
-import React, { Component , useState } from "react";
+import React, { Component , Fragment, useState } from "react";
+import { BrowserRouter as Router, Route,} from 'react-router-dom';
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/layout/Header";
@@ -10,6 +11,7 @@ import ForgotPW from "./components/pages/ForgotPW";
 import Home from "./components/pages/Home/Home"
 import Register from "./components/pages/Register"
 import EditProfilePage from "./components/pages/EditProfilePage"
+import Switch from "react-bootstrap/esm/Switch";
 
 
 
@@ -17,19 +19,24 @@ const App = () => {
 
 
   return (
-    <>
-    <div>
-      
-      <Header />
-      <Home/>
-      <SignInPage />
-      <Register/>
-      <ForgotPW/>
-      <SetupProfile />
-      <EditProfilePage />
-      <Footer />
+    <Fragment>
+      <Router>
+        <div>
+          <Header />
+            <Switch>
+              <Route exact path='/' component={Home} />
+              <Route path='/signInPage' component={SignInPage} />
+              <Route path='/register' component={Register} />
+              <Route path='/forgotPW' component={ForgotPW} />
+              <Route path='/setupProfile' component={SetupProfile} />
+              <Route path='/editProfilePage' component={EditProfilePage} />
+            </Switch>
+          <Footer />
+        </div>
+      </Router>
 
-      <script
+
+    <script
         src='https://unpkg.com/react/umd/react.production.min.js'
         crossorigin
       ></script>
@@ -44,9 +51,9 @@ const App = () => {
         crossorigin
       ></script>
 
-      
-    </div>
-    </>
+
+    </Fragment>
+
   );
 };
 

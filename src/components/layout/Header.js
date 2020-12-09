@@ -12,7 +12,7 @@ const Header = () => {
               className='toggle'
               aria-controls='basic-navbar-nav'
             />
-            <Navbar.Brand className='logo d-flex' href='#home'>
+            <Navbar.Brand className='logo d-flex' href='/'>
               <svg
                 width='186'
                 height='33'
@@ -49,7 +49,7 @@ const Header = () => {
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='mr-auto d-flex navbarLinks'>
                 <div className='d-lg-flex '>
-                  <Nav.Link href='#home'>
+                  <Nav.Link href='/'>
                     <span className='textCustom d-flex'>
                       <svg
                         width='18'
@@ -100,7 +100,7 @@ const Header = () => {
                   </Nav.Link>
                 </div>
                 <div className='d-lg-flex'>
-                  <Nav.Link href='#SignIn'>
+                  <Nav.Link href='/signInPage'>
                     <span className='textCustom d-flex'>
                       <svg
                         width='16'
@@ -121,7 +121,7 @@ const Header = () => {
                     </span>
                   </Nav.Link>
                   <div class='line'></div>
-                  <Nav.Link href='#regsiter'>
+                  <Nav.Link href='/register'>
                     <span className='textCustom d-flex'>
                       <svg
                         width='18'
