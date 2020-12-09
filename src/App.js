@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+
+import React, { Component , useState } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import SetupProfile from "./components/pages/SetupProfile";
 import SignInPage from "./components/pages/SignIn";
 import ForgotPW from "./components/pages/ForgotPW";
 import Home from "./components/pages/Home/Home"
+
 
 const App = () => {
 
@@ -42,21 +45,40 @@ const App = () => {
 
   return (
     <div>
-      <Header />
-      <div>
-        {(user.email !== "") ? (
+    
+      {(user.email !== "") ? (
           // <div className="welcome">
           //   <h2>Welcome, <span>{user.name}</span></h2>
           //   <button onClick={Logout}>Logout</button>
           // </div>
 
-          //successful sign in
+      <Header />
+                 //successful sign in
           <Home/>
-          ) : (
+       
+           ) : (
           <SignInPage SignIn={SignIn} error={error} />
         )}  
       </div>
-      
+
+      <SetupProfile />
+      <Footer />
+      <script
+        src='https://unpkg.com/react/umd/react.production.min.js'
+        crossorigin
+      ></script>
+
+      <script
+        src='https://unpkg.com/react-dom/umd/react-dom.production.min.js'
+        crossorigin
+      ></script>
+
+      <script
+        src='https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js'
+        crossorigin
+      ></script>
+
+      <div>   
       <Footer />
     </div>
   );

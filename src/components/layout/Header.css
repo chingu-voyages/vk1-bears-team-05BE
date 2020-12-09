@@ -20,7 +20,7 @@
 }
 
 header {
-  border: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
 }
 
 header > div {
@@ -87,6 +87,6 @@ header .toggle {
 
   .navbarLinks {
     padding-top: 16px;
-    border: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
   }
 }
