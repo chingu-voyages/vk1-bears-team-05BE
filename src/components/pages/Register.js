@@ -15,39 +15,41 @@ const Register = () => {
   const [mobileNumber, setMobileNumber] = useState();
   const [city, setCity] = useState();
 
-
-  console.log( typeof email )
-  console.log( typeof password )
-  console.log( typeof firstName )
-  console.log( typeof lastName )
-  console.log( typeof mobileNumber )
-  console.log( typeof city )
+  console.log(typeof email);
+  console.log(typeof password);
+  console.log(typeof firstName);
+  console.log(typeof lastName);
+  console.log(typeof mobileNumber);
+  console.log(typeof city);
 
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState();
 
-  const handleSubmit  = async (e) => {
-
+  const handleSubmit = async (e) => {
     const form = e.currentTarget;
 
-    const newUser = {email, password, firstName, lastName ,city , mobileNumber};
+    const newUser = {
+      email,
+      password,
+      firstName,
+      lastName,
+      city,
+      mobileNumber,
+    };
     if (form.checkValidity() === false) {
       e.preventDefault();
       e.stopPropagation();
     }
-    setValidated(false);
+    setValidated(true);
 
-
-    await Axios
-
-    .post("http://localhost:8080/api/v1/auth/register",newUser)
-    .then(res => {
+    await Axios.post(
+      "http://localhost:8080/api/v1/auth/register",
+      newUser
+    ).then((res) => {
       console.log(res);
       console.log(res.data);
-    })
-
-    
-  }
+    });
+  };
 
   return (
     <>
@@ -60,7 +62,7 @@ const Register = () => {
 
           <div>
             {/* loob */}
-            <Form noValidate validated={validated} onSubmit={ handleSubmit }>
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
               <Form.Row>
                 <Form.Group
                   as={Col}
@@ -84,7 +86,11 @@ const Register = () => {
 
                 <Form.Group as={Col} md='12' controlId='validationCustom04'>
                   <Form.Label className='formLabel'>Password</Form.Label>
-                  <Form.Control type='password' required  onChange={(e) => setPassword(e.target.value)}/>
+                  <Form.Control
+                    type='password'
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                   <Form.Label className='passwordLabel'>
                     Password must Contain between 8–36 characters, at least 1
                     upper-case letter and at least 1 number
@@ -94,11 +100,21 @@ const Register = () => {
               <Form.Row>
                 <Form.Group as={Col} md='12' controlId='validationCustom01'>
                   <Form.Label className='formLabel'>First Name</Form.Label>
-                  <Form.Control required type='text' placeholder='Ex: Sam'  onChange={(e) => setFirstName(e.target.value)}/>
+                  <Form.Control
+                    required
+                    type='text'
+                    placeholder='Ex: Sam'
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
                 </Form.Group>
                 <Form.Group as={Col} md='12' controlId='validationCustom02'>
                   <Form.Label className='formLabel'>Last Name</Form.Label>
-                  <Form.Control required type='text' placeholder='Ex: Smith' onChange={(e) => setLasName(e.target.value)}/>
+                  <Form.Control
+                    required
+                    type='text'
+                    placeholder='Ex: Smith'
+                    onChange={(e) => setLasName(e.target.value)}
+                  />
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationCustom03'>
