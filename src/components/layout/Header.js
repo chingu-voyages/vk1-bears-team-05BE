@@ -49,7 +49,7 @@ const Header = () => {
             <Navbar.Collapse id='basic-navbar-nav'>
               <Nav className='mr-auto d-flex navbarLinks'>
                 <div className='d-lg-flex '>
-                  <Nav.Link href='/'>
+                  <Nav.Link href='/CreateRequestPage'>
                     <span className='textCustom d-flex'>
                       <svg
                         width='18'
@@ -150,6 +150,5 @@ const Header = () => {
     </>
   );
 };
-
 
 export default Header;
