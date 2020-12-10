@@ -23,7 +23,17 @@
   font-size: 2.25rem;
   line-height: 42.66px;
   color: #131415;
+  margin-bottom: 32px;
+}
+
+.CreateRequest .titlePara {
   margin-bottom: 40px;
+  font-family: "Roboto";
+  font-size: 1.12rem;
+  font-weight: 400;
+  line-height: 26px;
+  text-align: center;
+  color: #454a4d;
 }
 
 .CreateRequest .formLabel {
@@ -34,19 +44,11 @@
   color: #131415;
 }
 
-.CreateRequest .passwordLabel {
+.CreateRequest .textLabels {
   font-weight: 400;
   font-size: 0.87rem;
   line-height: 20px;
   color: #454a4d;
-}
-
-.CreateRequest .termsLabel {
-  font-weight: 400;
-  line-height: 26px;
-  color: #454a4d;
-  margin-top: 11px;
-  margin-bottom: 19px;
 }
 
 .buttonGrp {
@@ -70,7 +72,7 @@
 
 .CreateRequest .saveButton {
   background-color: #d73728;
-  width: 105px;
+  width: 165px;
   height: 40px;
   color: #fff;
   font-weight: 700;
