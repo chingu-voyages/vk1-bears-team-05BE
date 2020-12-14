@@ -62,7 +62,8 @@
   border-color: #d73728;
 }
 
-.customButton:hover {
+.customButton:hover,
+.customButton:visited {
   background-color: #d73728;
   border-color: #d73728;
 }

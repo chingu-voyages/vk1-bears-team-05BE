@@ -152,7 +152,7 @@ const Register = () => {
                   </Form.Label>
                 </Router>
               </Form.Group>
-              <Button className='customButton' type='submit'>
+              <Button className='btn-danger customButton' type='submit'>
                 CREATE ACCOUNT
               </Button>
             </Form>
