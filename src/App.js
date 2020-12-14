@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import SetupProfile from "./components/pages/SetupProfile";
+import CreateRequestPage from "./components/pages/CreateRequestPage";
 import SignInPage from "./components/pages/SignIn";
 import ForgotPW from "./components/pages/ForgotPW";
 import Home from "./components/pages/Home/Home";
@@ -25,6 +26,7 @@ const App = () => {
             <Route path='/forgotPW' component={ForgotPW} />
             <Route path='/setupProfile' component={SetupProfile} />
             <Route path='/editProfilePage' component={EditProfilePage} />
+            <Route path='/createRequestPage' component={CreateRequestPage} />
           </Switch>
           <Footer />
         </div>
