@@ -1,97 +1,87 @@
-import React, { Component, Fragment, useState } from "react";
+import React, {Fragment , useEffect} from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
-import SetupProfile from "./components/pages/SetupProfile";
-import CreateRequestPage from "./components/pages/CreateRequestPage";
-import SignInPage from "./components/pages/SignIn";
-import ForgotPW from "./components/pages/ForgotPW";
-import Home from "./components/pages/Home/Home";
-import Register from "./components/pages/Register";
-import EditProfilePage from "./components/pages/EditProfilePage";
 import Switch from "react-bootstrap/esm/Switch";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+//Layout
+import Header from "./components/layout/Header/Header";
+import Footer from "./components/layout/Footer/Footer";
+
+//Pages
+import SetupProfile from "./components/pages/SetupProfile/Index";
+import CreateRequest from "./components/pages/CreateRequestPage/Index";
+import SignIn from "./components/pages/SignIn/Index";
+import ForgotPW from "./components/pages/ForgotPW/Index";
+import Home from "./components/pages/Home/Home";
+import Register from "./components/pages/Register/Index";
+import EditProfile from "./components/pages/EditProfilePage/Index";
+
+
+import Activation from "./components/pages/Activation/Activation";
+import { useDispatch } from "react-redux";
+import jwt_decode from "jwt-decode";
+import { authConstants } from "./_constants";
+
 
 const App = () => {
-  return (
-    <Fragment>
-      <Router>
-        <div>
-          <Header />
-          <Switch className='switchLayout'>
-            <Route exact path='/' component={Home} />
-            <Route path='/signInPage' component={SignInPage} />
-            <Route path='/register' component={Register} />
-            <Route path='/forgotPW' component={ForgotPW} />
-            <Route path='/setupProfile' component={SetupProfile} />
-            <Route path='/editProfilePage' component={EditProfilePage} />
-            <Route path='/createRequestPage' component={CreateRequestPage} />
-          </Switch>
-          <Footer />
-        </div>
-      </Router>
 
-      <script
-        src='https://unpkg.com/react/umd/react.production.min.js'
-        crossorigin
-      ></script>
+    const dispatch = useDispatch();
 
-      <script
-        src='https://unpkg.com/react-dom/umd/react-dom.production.min.js'
-        crossorigin
-      ></script>
+    useEffect(() => {
+      if (localStorage.jwtToken) {
+        const token = localStorage.jwtToken;
 
-      <script
-        src='https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js'
-        crossorigin
-      ></script>
-    </Fragment>
-  );
+        const decoded = jwt_decode(token);
+
+        dispatch({
+          type: authConstants.LOGIN_SUCCESS,
+          user: decoded,
+        });
+    };
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+
+    return (
+      <Fragment>
+        <Router>
+          <div>
+            <Header />
+            <Switch className='switchLayout'>
+              <Route exact path='/' component={Home} />
+              <Route path='/signIn' component={SignIn} />
+              <Route path='/register' component={Register} />
+              <Route path="/activate/:key" component={Activation} />
+              <Route path='/forgotPW' component={ForgotPW} />
+              <Route path='/setupProfile' component={SetupProfile} />
+              <Route path='/editProfilePage' component={EditProfile} />
+              <Route path='/createRequestPage' component={CreateRequest} />
+            </Switch>
+            <Footer />
+          </div>
+        </Router>
+
+        <script
+          src='https://unpkg.com/react/umd/react.production.min.js'
+          crossorigin
+        ></script>
+
+        <script
+          src='https://unpkg.com/react-dom/umd/react-dom.production.min.js'
+          crossorigin
+        ></script>
+
+        <script
+          src='https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js'
+          crossorigin
+        ></script>
+      </Fragment>
+    );
+    
 };
 
 export default App;
 
-// // manual user
-// const adminUser = {
-//   name: "Admin",
-//   email: "admin@admin.com",
-//   password: "admin123"
-// }
-
-// const [user, setUser] = useState({name: "", email: ""});
-// const [error, setError] = useState("");
-
-// const SignIn = details => {
-//   // console.log(details);
-
-//   if (details.email === adminUser.email && details.password === adminUser.password){
-//     // console.log("Logged in");
-//     setUser({
-//       name: details.name,
-//       email: details.email
-//     });
-//   } else {
-//     // console.log("Details do not match!");
-//     setError("Details do not match!");
-//   }
-
-// }
-
-// const Logout = () => {
-//   setUser({ name: "", email: "" });
-// }
-
-//<SignInPage SignIn={SignIn} error={error} />
-
-// {(user.email !== "") ? (
-//   // <div className="welcome">
-//   //   <h2>Welcome, <span>{user.name}</span></h2>
-//   //   <button onClick={Logout}>Logout</button>
-//   // </div>
-
-//          //successful sign in
-
-//    ) : (
-
-// )}

@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState,} from "react";
 import { useDropzone } from "react-dropzone";
-import { Form, Button, Col, InputGroup } from "react-bootstrap";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Form, Col, InputGroup } from "react-bootstrap";
+
 import "./CreateRequestPage.css";
 
 const CreateRequestPage = () => {
