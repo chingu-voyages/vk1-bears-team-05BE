@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
+import "./SignIn.css";
 import ForgotPW from "../ForgotPW/Index";
 
-import queryString from "query-string";
-import "./SignIn.css";
+
 import { useDispatch, useSelector } from "react-redux";
-import { authActions } from "../../../_actions";
+import queryString from "query-string";
+import { userActions } from "../../../_actions";
 
 // { SignIn, error }
 const SignIn = (props) => {
@@ -41,7 +42,7 @@ const SignIn = (props) => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    dispatch(authActions.loginAction(details));
+    dispatch(userActions.loginAction(details));
   };
 
   return (

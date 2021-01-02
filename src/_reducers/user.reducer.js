@@ -1,15 +1,23 @@
-import { authConstants } from "../_constants";
+import { userConstants } from "../_constants";
 
 const initialState = {
   isAuthenticated: false,
   user: {},
   loading: false,
   errors: {},
+  isValid: false
 };
 
 export const auth = (state = initialState, action) => {
   switch (action.type) {
-    case authConstants.LOGIN_SUCCESS:
+
+    case userConstants.USER_REGISTER_SUCCESS:
+      return {
+        ...state,
+        isValid: true,
+      };
+    case userConstants.USER_REGISTER_FAIL:  
+    case userConstants.USER_LOGIN_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
@@ -17,17 +25,17 @@ export const auth = (state = initialState, action) => {
         errors: {},
         loading: false,
       };
-    case authConstants.START_LOADING:
+    case userConstants.USER_START_LOADING:
       return {
         ...state,
         loading: true,
       };
-    case authConstants.SET_ERRORS:
+    case userConstants.USER_SET_ERRORS:
       return {
         ...state,
         errors: action.errors,
       };
-    case authConstants.LOGOUT:
+    case userConstants.USER_LOGOUT:
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("jwtToken");
 

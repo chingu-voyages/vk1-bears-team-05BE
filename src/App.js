@@ -21,7 +21,7 @@ import EditProfile from "./components/pages/EditProfilePage/Index";
 import Activation from "./components/pages/Activation/Activation";
 import { useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
-import { authConstants } from "./_constants";
+import { userConstants } from "./_constants";
 
 
 const App = () => {
@@ -35,7 +35,7 @@ const App = () => {
         const decoded = jwt_decode(token);
 
         dispatch({
-          type: authConstants.LOGIN_SUCCESS,
+          type: userConstants.USER_LOGIN_SUCCESS,
           user: decoded,
         });
     };
