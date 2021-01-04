@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   errors: {},
   isValid: false
+  
 };
 
 export const auth = (state = initialState, action) => {

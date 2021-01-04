@@ -9,6 +9,7 @@ const loginAction = (details) => {
       console.log(res)
 
       if (res.type === "loginSuccess") {
+
         localStorage.setItem("jwtToken", res.token);
         const decoded = jwt_decode(res.token);
 
@@ -18,6 +19,7 @@ const loginAction = (details) => {
         });
 
         localStorage.setItem("isLoggedIn", true);
+        console.log(localStorage)
       }
       else if (res.type === "Invalid") {
         dispatch({
@@ -58,6 +60,10 @@ const registerAction = (details) => {
       if (res.type === "registerSuccessful") {
         dispatch({
           type: userConstants.USER_REGISTER_SUCCESS,
+          errors: {
+            type: "warning",
+            message: "Register Successful",
+          }
         });
       }
       else if (res.type === "emailExists") {
@@ -73,7 +79,7 @@ const registerAction = (details) => {
           type: userConstants.USER_SET_ERRORS,
           errors: {
             type: "warning",
-            message: "password is required",
+            message: "All fields are required",
           }
         });
       }else {

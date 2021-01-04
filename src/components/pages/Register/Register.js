@@ -6,7 +6,6 @@ import "./Register.css";
 // import UserContext from "../../context/UserContext";
 // import ErrorNotice from "../misc/ErrorNotice";
 import { useDispatch, useSelector } from "react-redux";
-import queryString from "query-string";
 import { userActions } from "../../../_actions";
 
 const Register = (props) => {
