@@ -1,29 +1,101 @@
-import React, { useState} from "react";
+import React, { useState , useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Form, Col, InputGroup } from "react-bootstrap";
 
+import {profileActions , userActions} from'../../../_actions'
+import jwt_decode from "jwt-decode";
+import {profileConstants} from '../../../_constants'
+import { useDispatch, useSelector} from "react-redux";
+import instance from '../../../_helpers/axios'
+import { store } from 'react-notifications-component'
+
 import "./EditProfilePage.css";
 
-const EditProfilePage = () => {
+const EditProfilePage = (props) => {
+
   const [validated, setValidated] = useState(false);
-
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
-
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
-  const files = acceptedFiles.map((file) => (
+  const dispatch = useDispatch();
+
+  const profileData = useSelector((state) => state.profile);
+  const auth = useSelector((state) => state.auth);
+  const {user, errors} = auth;
+  const {success, profile , valid} = profileData;
+
+  useEffect(() => {
+
+    if (valid === true) {
+      props.history.push("/profilePage")
+    }
+
+  }, [valid, props.history, props.location])
+
+  const file = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
   ));
+
+  console.log(file.path)
+
+  const uploadFileHandler = async(e) => {
+
+    const token = localStorage.jwtToken;
+    const decoded = jwt_decode(token)
+    const profileId = decoded.profileId
+
+    const file = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image', file)
+    
+
+    try{
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+        const result = instance
+        .post('/profile/upload/'+profileId, formData, config)
+        .then((res) => {
+
+          console.log(res)
+          if (res.status === 200) {
+            dispatch({
+              type: profileConstants.PROFILE_UPLOAD_SUCCESS,
+            });
+          } 
+        })
+        .catch((err) => {
+          if (err.response.status === 400) {
+            dispatch({
+              type: profileConstants.PROFILE_UPLOAD_FAIL,
+            });
+          } 
+        });
+
+        console.log(result)
+    } catch(error){
+       console.error(error)
+    }
+}
+
+  const [userDetails, setUserDetails] = useState({ email: "", firstName: "" , lastName: "" , city: "" , mobileNumber: "" });
+  const [profileDetails, setProfileDetails] = useState({ bloodType: "", userAbout: "" });
+
+  console.log(userDetails)
+  console.log(profileDetails)
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+      event.preventDefault();
+      event.stopPropagation();
+
+      dispatch(profileActions.updateProfileAction(profileDetails))
+      dispatch(userActions.updateUserAction(userDetails))
+
+  };
 
   return (
     <>
@@ -41,7 +113,9 @@ const EditProfilePage = () => {
                   <Form.Label className='formLabel'>Profile Photo</Form.Label>
                   <section className='dragNdrop'>
                     <div {...getRootProps({ className: "dropzone" })}>
-                      <input {...getInputProps()} />
+                      <input {...getInputProps()}
+                      onChange = {uploadFileHandler}
+                       />
                       <div>
                         <svg
                           width='14'
@@ -67,22 +141,28 @@ const EditProfilePage = () => {
                     Recommended size: 300x300 pixles ( jpg or png format )
                   </Form.Label>
                   <aside>
-                    <p>{files}</p>
+                    <p>{file}</p>
                   </aside>
                 </Form.Group>
 
                 <Form.Group as={Col} md='6' controlId='validationCustom01'>
                   <Form.Label className='formLabel'>First Name</Form.Label>
-                  <Form.Control required type='text' />
+                  <Form.Control required type='text' onChange={(e) =>
+                        setUserDetails({ ...userDetails, firstName: e.target.value })
+                      } />
                 </Form.Group>
                 <Form.Group as={Col} md='6' controlId='validationCustom02'>
                   <Form.Label className='formLabel'>Last Name</Form.Label>
-                  <Form.Control required type='text' />
+                  <Form.Control required type='text' onChange={(e) =>
+                        setUserDetails({ ...userDetails, lastName: e.target.value })
+                      } />
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationAboutMe'>
                   <Form.Label className='formLabel'>About Me</Form.Label>
-                  <Form.Control required as='textarea' rows={3} />
+                  <Form.Control required as='textarea' rows={3} onChange={(e) =>
+                        setProfileDetails({ ...profileDetails, userAbout: e.target.value })
+                      } />
                   <Form.Label className='passwordLabel'>
                     Maximum of 1000 characters
                   </Form.Label>
@@ -90,7 +170,9 @@ const EditProfilePage = () => {
 
                 <Form.Group as={Col} md='12' controlId='validationBloodType'>
                   <Form.Label className='formLabel'>Blood Type</Form.Label>
-                  <Form.Control required as='select'>
+                  <Form.Control required as='select' onChange={(e) =>
+                        setProfileDetails({ ...profileDetails, bloodType: e.target.value })
+                      }>
                     <option>O+</option>
                     <option>O-</option>
                     <option>A+</option>
@@ -104,7 +186,9 @@ const EditProfilePage = () => {
 
                 <Form.Group as={Col} md='12' controlId='validationCustom03'>
                   <Form.Label className='formLabel'>City</Form.Label>
-                  <Form.Control type='text' required />
+                  <Form.Control type='text' required onChange={(e) =>
+                        setUserDetails({ ...userDetails, city: e.target.value })
+                      } />
                   <Form.Control.Feedback type='invalid'>
                     Invalid city.
                   </Form.Control.Feedback>
@@ -121,6 +205,9 @@ const EditProfilePage = () => {
                       type='email'
                       aria-describedby='inputGroupPrepend'
                       required
+                      onChange={(e) =>
+                        setUserDetails({ ...userDetails, email: e.target.value })
+                      }
                     />
                     <Form.Control.Feedback type='invalid'>
                       Invalid email address.
@@ -130,7 +217,9 @@ const EditProfilePage = () => {
 
                 <Form.Group as={Col} md='6' controlId='validationCustom05'>
                   <Form.Label className='formLabel'>Mobile Number</Form.Label>
-                  <Form.Control type='number' required />
+                  <Form.Control type='number' required onChange={(e) =>
+                        setUserDetails({ ...userDetails, mobileNumber: e.target.value })
+                      } />
                   <Form.Control.Feedback type='invalid'>
                     Please provide 11 digit mobile number.
                   </Form.Control.Feedback>

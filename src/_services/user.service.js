@@ -1,16 +1,15 @@
-import axios from "axios" ;
+import instance from '../_helpers/axios'
+import jwt_decode from "jwt-decode";
+import axios from 'axios'
 
 const url = "http://localhost:8080/api/v1";
 
 //local storage not yet working 
 
 const login = async (details) => {
-  const result = axios
-    .post(url + "/auth/login", details)
+  const result = instance.post("/auth/login", details)
     .then((res) => {
-
       console.log(res)
-
       // Save to localStorage
       // Set token to localStorage
 
@@ -44,8 +43,8 @@ const login = async (details) => {
 };
 
 const register = async (details) => {
-  const result = axios
-    .post(url + "/auth/register", details)
+  const result = instance
+    .post("/auth/register", details)
     .then((res) => {
 
       console.log(res)
@@ -77,20 +76,17 @@ const register = async (details) => {
 };
 
 const activation = async (key) => {
-  const result = axios
-    .post(url + "/auth/register" + key)
+
+  const result = instance
+    .get("/auth/activate/" + key)
     .then((res) => {
-
-      
       console.log(res)
-
      if (res.status === 200) {
         return {
           type: "success" 
         } 
       } 
-    })
-
+  })
     .catch((err) => {
       if (err.response.status === 400) {
         return {
@@ -103,16 +99,15 @@ const activation = async (key) => {
 };
 
 const findAllUser = async () => {
-  const result = axios
-
-    .get(url + "/auth/users")
+  const result = instance.get("/auth/users")
     .then((res) => {
 
       console.log(res)
 
      if (res.status === 200) {
         return {
-          type: "success" 
+          type: "success" ,
+          users: res.data.users
         } 
       } 
     })
@@ -130,16 +125,23 @@ const findAllUser = async () => {
 
 // need user id and token
 const findOneUser = async () => {
-  const result = axios
 
-    .get(url + "/auth/users" ,)
+  const token = localStorage.jwtToken;
+  const decoded = jwt_decode(token)
+  const userId = decoded.userId
+  console.log(userId)
+  const result = instance
+
+
+    .get("/auth/users/"+userId)
     .then((res) => {
 
       console.log(res)
 
      if (res.status === 200) {
         return {
-          type: "success" 
+          type: "success" ,
+          users: res.data.data
         } 
       } 
     })
@@ -154,11 +156,16 @@ const findOneUser = async () => {
 
   return result;
 };
-// need user id and token
-const updateUser = async () => {
-  const result = axios
+// need user id 
+const updateUser = async (userDetails) => {
 
-    .put(url + "/auth/users")
+  const token = localStorage.jwtToken;
+  const decoded = jwt_decode(token)
+  const userId = decoded.userId
+  console.log(userId)
+
+  const result = instance
+    .put("/auth/users/"+userId , userDetails)
     .then((res) => {
 
       console.log(res)
@@ -182,8 +189,8 @@ const updateUser = async () => {
 };
 // need user id and token
 const deleteUser = async () => {
-  const result = axios
-    .delete(url + "/auth/users")
+  const result = instance
+    .delete("/auth/users")
     .then((res) => {
 
       console.log(res)

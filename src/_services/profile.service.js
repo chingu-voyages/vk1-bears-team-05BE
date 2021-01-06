@@ -1,18 +1,27 @@
 import axios from "axios";
+import jwt_decode from "jwt-decode";
+import instance from '../_helpers/axios'
 
 const url = "http://localhost:8080/api/v1";
 
-// profileid not yet located
-const uploadProfile = async () => {
-  const result = axios
-    .put(url + "/profile/upload")
+//
+const findOneProfile = async () => {
+
+  const token = localStorage.jwtToken;
+  const decoded = jwt_decode(token)
+  const profileId = decoded.profileId
+  console.log(profileId)
+
+  const result = instance
+    .get(url + "/profile/" + profileId)
     .then((res) => {
 
       console.log(res)
 
       if (res.status === 200) {
         return {
-          type: "success" 
+          type: "success",
+          profile: res.data.data
         } 
       } 
     })
@@ -23,13 +32,19 @@ const uploadProfile = async () => {
         };
       } 
     });
-    
+
   return result;
 };
-//need to add Request id 
-const updateProfile = async () => {
-  const result = axios
-    .put(url + "/profile")
+
+//
+const updateProfile = async (profileDetails) => {
+
+  const token = localStorage.jwtToken;
+  const decoded = jwt_decode(token)
+  const profileId = decoded.profileId
+  console.log(profileId)
+  const result = instance
+    .put("/profile/" + profileId , profileDetails)
     .then((res) => {
 
       console.log(res)
@@ -52,6 +67,7 @@ const updateProfile = async () => {
   return result;
 };
 
+//
 const findAllProfile = async () => {
   const result = axios
     .get(url + "/profile")
@@ -77,30 +93,7 @@ const findAllProfile = async () => {
   return result;
 };
 
-//need to add Request id 
-const findOneProfile = async () => {
-  const result = axios
-    .get(url + "/profile")
-    .then((res) => {
 
-      console.log(res)
-
-      if (res.status === 200) {
-        return {
-          type: "success"
-        } 
-      } 
-    })
-    .catch((err) => {
-      if (err.response.status === 400) {
-        return {
-          type: "error"
-        };
-      } 
-    });
-
-  return result;
-};
 
 //need to add Request id 
 const deleteProfile = async () => {
@@ -131,9 +124,8 @@ const deleteProfile = async () => {
 
 
 export const ProfileService = { 
-  uploadProfile,
+  findOneProfile,
   updateProfile,
   findAllProfile,
-  findOneProfile,
   deleteProfile
 };

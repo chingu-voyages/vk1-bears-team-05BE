@@ -25,17 +25,18 @@ const SignIn = (props) => {
     const value = queryString.parse(props.location.search);
     const activate = value.activate;
 
-    if (activate === "1") {
-      setShowActivate(true);
-    }
+    // if (activate === "1") {
+    //   setShowActivate(true);
+    // }
 
     if (isAuthenticated) {
-      props.history.push("/");
+      props.history.push("/SetupProfile");
     }
 
     if (errors) {
       setPageError(errors);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, errors, props.history, props.location]);
 
@@ -51,7 +52,7 @@ const SignIn = (props) => {
         <Row>
           <Col lg={6} md={6} sm={12} className="p-5 m-auto">
             <div className="SignInBox">
-              {showActivate ? "Success" : ""}
+              {/* {showActivate ? "Success" : ""} */}
               <h1>Sign In</h1>
 
               <Form className="mt-4" onSubmit={submitHandler}>

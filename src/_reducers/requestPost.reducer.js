@@ -1,27 +1,97 @@
-import { recordConstants } from "../_constants";
+import { requestPostConstants } from "../_constants";
 
 const initialState = {
-  post: null,
-  filtered: null,
-  current: null,
+
+  post: {},
+  posts:{},
+  success: false,
   loading: false,
+
   errors: {},
 };
 
 export const post = (state = initialState, action) => {
+
   switch (action.type) {
-    case recordConstants.GET_RECORDS:
+
+    case requestPostConstants.REQUESTPOST_CREATE_SUCCESS:
       return {
         ...state,
-        records: action.records,
-        loading: false,
-      };
-    case recordConstants.START_LOADING:
-      return {
-        ...state,
+        success:true,
         loading: true,
       };
-    default:
-      return state;
+    case requestPostConstants.REQUESTPOST_CREATE_FAIL:
+      return {
+        ...state,
+        errors: action.errors,
+      };
+    /* falls through */
+    case requestPostConstants.REQUESTPOST_UPLOAD_SUCCESS:
+      return {
+        ...state,
+        success:true,
+        loading: true,
+      };
+    case requestPostConstants.REQUESTPOST_UPLOAD_FAIL:
+      return {
+        ...state,
+        errors: action.errors,
+      };
+    /* falls through */
+    case requestPostConstants.REQUESTPOST_UPDATE_SUCCESS:
+      return {
+        ...state,
+        success:true,
+        loading: true,
+      };
+    case requestPostConstants.REQUESTPOST_UPDATE_FAIL:
+      return {
+        ...state,
+        errors: action.errors,
+      };
+    /* falls through */
+    case requestPostConstants.REQUESTPOST_LIST_SUCCESS:
+      return {
+        ...state,
+        posts: action.posts,
+        success:true,
+        loading: true,
+      };
+    case requestPostConstants.REQUESTPOST_LIST_FAIL:
+      return {
+        ...state,
+        errors: action.errors,
+      };
+    /* falls through */
+    case requestPostConstants.REQUESTPOST_DETAILS_SUCCESS:
+      return {
+        ...state,
+        posts: action.post,
+        success:true,
+        loading: true,
+      };
+    case requestPostConstants.REQUESTPOST_DETAILS_FAIL:
+    /* falls through */
+    case requestPostConstants.REQUESTPOST_DELETE_SUCCESS:
+      return {
+        ...state,
+        success:true,
+        loading: true,
+      };
+    case requestPostConstants.REQUESTPOST_DELETE_FAIL:
+      return {
+        ...state,
+        errors: action.errors,
+      }
+      /* falls through */
+
+    default: {
+
+        return {
+          ...state
+  
+        }
+      }
+  
   }
 };

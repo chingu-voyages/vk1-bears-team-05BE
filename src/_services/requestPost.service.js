@@ -1,4 +1,6 @@
 import axios from "axios";
+import instance from '../_helpers/axios';
+import jwt_decode from "jwt-decode";
 
 //RequestPostid not yet located
 
@@ -6,7 +8,7 @@ const url = "http://localhost:8080/api/v1";
 
 const addRequestPost = async (details) => {
 
-  const result = axios
+  const result = instance
     .post(url + "/requestPost", details)
     .then((res) => {
       console.log(res)
@@ -26,6 +28,7 @@ const addRequestPost = async (details) => {
     
     return result;
 };
+
 //need to add Request id 
 const uploadRequestPost = async () => {
   const result = axios

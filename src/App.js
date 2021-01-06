@@ -16,49 +16,85 @@ import ForgotPW from "./components/pages/ForgotPW/Index";
 import Home from "./components/pages/Home/Home";
 import Register from "./components/pages/Register/Index";
 import EditProfile from "./components/pages/EditProfilePage/Index";
+import Profile from "./components/pages/Profile/Index";
+import Explore from "./components/pages/ExplorePage/Index"
 
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 import Activation from "./components/pages/Activation/Activation";
-import { useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { userConstants } from "./_constants";
+import {userActions , profileActions} from './_actions'
+import { useDispatch, useSelector} from "react-redux";
 
 
 const App = () => {
 
+    const auth = useSelector((state) => state.auth);
+    const { isAuthenticated} = auth;
     const dispatch = useDispatch();
 
+
+
     useEffect(() => {
-      if (localStorage.jwtToken) {
-        const token = localStorage.jwtToken;
 
-        const decoded = jwt_decode(token);
+        if (localStorage.jwtToken) {
+          
+          const token = localStorage.jwtToken;
 
-        dispatch({
-          type: userConstants.USER_LOGIN_SUCCESS,
-          user: decoded,
-        });
-    };
+          const decoded = jwt_decode(token);
+
+          dispatch({
+            type: userConstants.USER_LOGIN_SUCCESS,
+            user: decoded,
+          });
+        }
+        
+        if (localStorage.jwtToken) {
+          
+          const token = localStorage.jwtToken;
+
+          const decoded = jwt_decode(token);
+
+          dispatch({
+            type: userConstants.USER_LOGIN_SUCCESS,
+            user: decoded,
+          });
+        }
+
+        if (isAuthenticated === true){
+
+          fetch(dispatch(userActions.findOneUserAction()))
+          fetch(dispatch(profileActions.GetprofileAction()))
+
+        }
+
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated]);
 
 
 
     return (
       <Fragment>
         <Router>
+        <ReactNotification />
           <div>
             <Header />
             <Switch className='switchLayout'>
+              
               <Route exact path='/' component={Home} />
               <Route path='/signIn' component={SignIn} />
               <Route path='/register' component={Register} />
-              <Route path="/activate/:key" component={Activation} />
+              <Route path='/activate/:key' component={Activation} />
               <Route path='/forgotPW' component={ForgotPW} />
               <Route path='/setupProfile' component={SetupProfile} />
               <Route path='/editProfilePage' component={EditProfile} />
               <Route path='/createRequestPage' component={CreateRequest} />
+              <Route path='/profilePage' component={Profile} />
+              <Route path='/explorePage' component={Explore} />
+
             </Switch>
             <Footer />
           </div>

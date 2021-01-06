@@ -7,6 +7,7 @@ import "./Register.css";
 // import ErrorNotice from "../misc/ErrorNotice";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../../_actions";
+import { store } from 'react-notifications-component'
 
 const Register = (props) => {
   const [details, setDetails] = useState({ email: "", password: "" , firstName: "" , lastName: "" , city: "" , mobileNumber: "" });
@@ -17,22 +18,35 @@ const Register = (props) => {
 
   const dispatch = useDispatch();
 
-  const {isValid, errors} = auth;
+  const {isValid, errors , success} = auth;
 
   
 
   useEffect(() => {
 
-    if (isValid) {
-      props.history.push("/signIn");
-    }
+    
 
+    if (success) {
+      props.history.push("/signIn");
+
+      store.addNotification({
+        title: 'Success!',
+        message: 'Activate Your Account by Email .',
+        type: 'success',                       
+        container: 'top-left',               
+        animationIn: ["animate__animated", "animate__fadeInRight"],   
+        animationOut: ["animate__animated", "animate__fadeOutRight"],  
+        dismiss: {
+          duration: 8000
+        }
+      })
+    }
     if (errors) {
       setPageError(errors);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValid, props.history, errors, props.location]);
+  }, [success, props.history, errors, props.location]);
   
 
   const handleSubmit = async (e) => {

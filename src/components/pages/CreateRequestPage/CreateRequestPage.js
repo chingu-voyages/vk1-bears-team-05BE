@@ -1,29 +1,56 @@
-import React, { useState,} from "react";
+import React, { useState,useEffect} from "react";
 import { useDropzone } from "react-dropzone";
 import { Form, Col, InputGroup } from "react-bootstrap";
 
 import "./CreateRequestPage.css";
 
-const CreateRequestPage = () => {
-  const [validated, setValidated] = useState(false);
+import { useDispatch, useSelector } from "react-redux";
+import { requestPostActions } from "../../../_actions";
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+const CreateRequestPage = (props) => {
+  const [details, setDetails] = useState({title: "", story: "" , photo: "" , bloodType: "", amount: "", location: "" , phoneNumber: "", closingDate: "", hospital: "" });
+  const [validated, setValidated] = useState(false);
+  const [pageError, setPageError] = useState({});
+  const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
+
+  const post = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+
+  const {errors , success} = post;
+
+
+  useEffect(() => {
+
+    if(success === true) {
+      props.history.push()
     }
 
-    setValidated(true);
-  };
+    if (errors) {
+      setPageError(errors);
+    }
 
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success, props.history, errors, props.location]);
+  
+
+
 
   const files = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
   ));
+
+  console.log(details)
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+    dispatch(requestPostActions.addRequestPostAction(details))
+  };
 
   return (
     <>
@@ -44,12 +71,17 @@ const CreateRequestPage = () => {
               <Form.Row>
                 <Form.Group as={Col} md='12' controlId='validationTitle'>
                   <Form.Label className='formLabel'>Title</Form.Label>
-                  <Form.Control type='text' required />
+                  <Form.Control type='text' required onChange={(e) =>
+                        setDetails({ ...details, title: e.target.value })
+                      }/>
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationYourStory'>
                   <Form.Label className='formLabel'>Your Story</Form.Label>
-                  <Form.Control required as='textarea' rows={3} />
+                  <Form.Control required as='textarea' rows={3}
+                  onChange={(e) =>
+                    setDetails({ ...details, story: e.target.value })
+                  } />
                   <Form.Label className='.textLabel'>
                     Maximum of 1000 words
                   </Form.Label>
@@ -93,7 +125,9 @@ const CreateRequestPage = () => {
 
                 <Form.Group as={Col} md='6' controlId='validationBloodType'>
                   <Form.Label className='formLabel'>Blood Type</Form.Label>
-                  <Form.Control required as='select'>
+                  <Form.Control required as='select' onChange={(e) =>
+                        setDetails({ ...details, bloodType: e.target.value })
+                      }>
                     <option>O+</option>
                     <option>O-</option>
                     <option>A+</option>
@@ -116,12 +150,17 @@ const CreateRequestPage = () => {
                     required
                     placeholder='Ex: 1 (Bag)'
                     type='number'
+                    onChange={(e) =>
+                      setDetails({ ...details, amount: e.target.value })
+                    }
                   />
                 </Form.Group>
 
                 <Form.Group as={Col} md='6' controlId='validationCustom05'>
                   <Form.Label className='formLabel'>Mobile Number</Form.Label>
-                  <Form.Control type='number' required />
+                  <Form.Control type='number' required onChange={(e) =>
+                        setDetails({ ...details, phoneNumber: e.target.value })
+                      }/>
                   <Form.Control.Feedback type='invalid'>
                     Please provide 11 digit mobile number.
                   </Form.Control.Feedback>
@@ -136,18 +175,25 @@ const CreateRequestPage = () => {
                       type='date'
                       aria-describedby='inputGroupPrepend'
                       required
+                      onChange={(e) =>
+                        setDetails({ ...details, closingDate: e.target.value })
+                      }
                     />
                   </InputGroup>
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationHospital'>
                   <Form.Label className='formLabel'>Hospital</Form.Label>
-                  <Form.Control required type='text' />
+                  <Form.Control required type='text' onChange={(e) =>
+                        setDetails({ ...details, hospital: e.target.value })
+                      }/>
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationLocation'>
                   <Form.Label className='formLabel'>Location</Form.Label>
-                  <Form.Control required type='text' />
+                  <Form.Control required type='text' onChange={(e) =>
+                        setDetails({ ...details, location: e.target.value })
+                      }/>
                 </Form.Group>
               </Form.Row>
               <div className='d-flex buttonGrp'>

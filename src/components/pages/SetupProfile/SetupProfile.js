@@ -1,7 +1,14 @@
 import React from "react";
 import "./SetupProfile.css";
+import { useDispatch, useSelector} from "react-redux";
+import {Button} from "react-bootstrap";
+import { Link } from 'react-router-dom';
 
 const SetupProfile = (props) => {
+
+  const profileData = useSelector((state) => state.profile);
+  const {profile} = profileData;
+
   return (
     <>
       <div className='setupPage'>
@@ -46,7 +53,10 @@ const SetupProfile = (props) => {
               profile.
             </p>
 
-            <button className='customButton'>GET STARTED</button>
+            {/* <button className='customButton'>GET STARTED</button> */}
+            <Link to = {`/EditprofilePage/${profile._id}`}>
+                <Button className='customButton' > EDIT PROFILE </Button>
+            </Link>
           </div>
         </section>
       </div>
