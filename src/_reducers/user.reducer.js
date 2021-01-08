@@ -51,7 +51,6 @@ export const auth = (state = initialState, action) => {
     case userConstants.USER_DETAILS_SUCCESS:
       return {
         ...state,
-        isValid:true,
         isAuthenticated: true,
         user: action.user,
         success:true, 
@@ -62,6 +61,7 @@ export const auth = (state = initialState, action) => {
     case userConstants.USER_UPDATE_SUCCESS:
       return {
         ...state,
+        isValid:true,
         user: action.user,
         errors: {}
       };

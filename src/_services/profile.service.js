@@ -1,8 +1,7 @@
-import axios from "axios";
+
 import jwt_decode from "jwt-decode";
 import instance from '../_helpers/axios'
 
-const url = "http://localhost:8080/api/v1";
 
 //
 const findOneProfile = async () => {
@@ -13,7 +12,8 @@ const findOneProfile = async () => {
   console.log(profileId)
 
   const result = instance
-    .get(url + "/profile/" + profileId)
+
+    .get("/profile/" + profileId)
     .then((res) => {
 
       console.log(res)
@@ -43,7 +43,9 @@ const updateProfile = async (profileDetails) => {
   const decoded = jwt_decode(token)
   const profileId = decoded.profileId
   console.log(profileId)
+  
   const result = instance
+
     .put("/profile/" + profileId , profileDetails)
     .then((res) => {
 
@@ -69,8 +71,8 @@ const updateProfile = async (profileDetails) => {
 
 //
 const findAllProfile = async () => {
-  const result = axios
-    .get(url + "/profile")
+  const result = instance
+    .get("/profile")
     .then((res) => {
 
       console.log(res)
@@ -97,9 +99,9 @@ const findAllProfile = async () => {
 
 //need to add Request id 
 const deleteProfile = async () => {
-  const result = axios
+  const result = instance
 
-    .get(url + "Profiles")
+    .get("Profiles")
     .then((res) => {
 
       console.log(res)

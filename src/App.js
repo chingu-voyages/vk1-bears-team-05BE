@@ -1,4 +1,4 @@
-import React, {Fragment , useEffect} from "react";
+import React, {Fragment , useEffect , useState , Component } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Switch from "react-bootstrap/esm/Switch";
 import "./App.css";
@@ -28,6 +28,8 @@ import { userConstants } from "./_constants";
 import {userActions , profileActions} from './_actions'
 import { useDispatch, useSelector} from "react-redux";
 
+import Loading from './components/layout/loader/Loading';
+
 
 const App = () => {
 
@@ -35,69 +37,75 @@ const App = () => {
     const { isAuthenticated} = auth;
     const dispatch = useDispatch();
 
+    const [loading, setLoading] = useState();
+    const [done, setDone] = useState();
 
 
-    useEffect(() => {
+  useEffect(() => {
 
-        if (localStorage.jwtToken) {
+      // setTimeout(() => {
+        setLoading(true)
+        // setTimeout(() => {
+          setDone(true)
+      //   }, 2500)
+      // }, 3000);
+  
+      if (localStorage.jwtToken) {
           
-          const token = localStorage.jwtToken;
+        const token = localStorage.jwtToken;
+        const decoded = jwt_decode(token);
 
-          const decoded = jwt_decode(token);
+        dispatch({
+          type: userConstants.USER_LOGIN_SUCCESS,
+          user: decoded,
+        });
+      }
 
-          dispatch({
-            type: userConstants.USER_LOGIN_SUCCESS,
-            user: decoded,
-          });
-        }
-        
-        if (localStorage.jwtToken) {
-          
-          const token = localStorage.jwtToken;
+      if (isAuthenticated === true){
 
-          const decoded = jwt_decode(token);
+        // dispatch(userActions.findOneUserAction())
+        // dispatch(profileActions.GetprofileAction())
 
-          dispatch({
-            type: userConstants.USER_LOGIN_SUCCESS,
-            user: decoded,
-          });
-        }
-
-        if (isAuthenticated === true){
-
-          fetch(dispatch(userActions.findOneUserAction()))
-          fetch(dispatch(profileActions.GetprofileAction()))
-
-        }
-
-    
+      }
+      
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
+  // {!done ? (
+  //   <Loading loading = {loading} />
+  //   ) : (
+  //     duv
+  // )}
 
-
+  
     return (
       <Fragment>
         <Router>
         <ReactNotification />
-          <div>
-            <Header />
-            <Switch className='switchLayout'>
-              
-              <Route exact path='/' component={Home} />
-              <Route path='/signIn' component={SignIn} />
-              <Route path='/register' component={Register} />
-              <Route path='/activate/:key' component={Activation} />
-              <Route path='/forgotPW' component={ForgotPW} />
-              <Route path='/setupProfile' component={SetupProfile} />
-              <Route path='/editProfilePage' component={EditProfile} />
-              <Route path='/createRequestPage' component={CreateRequest} />
-              <Route path='/profilePage' component={Profile} />
-              <Route path='/explorePage' component={Explore} />
 
-            </Switch>
-            <Footer />
-          </div>
+        {!done ? (
+          <Loading loading = {loading} />
+        ) : (
+        <div>
+          <Header />
+          <Switch className='switchLayout'>
+
+            <Route exact path='/' component={Home} />
+            <Route path='/signIn' component={SignIn} />
+            <Route path='/register' component={Register} />
+            <Route path='/activate/:key' component={Activation} />
+            <Route path='/forgotPW' component={ForgotPW} />
+            <Route path='/setupProfile' component={SetupProfile} />
+            <Route path='/editProfilePage' component={EditProfile} />
+            <Route path='/createRequestPage' component={CreateRequest} />
+            <Route path='/profilePage' component={Profile} />
+            <Route path='/explorePage' component={Explore} />
+
+          </Switch>
+          <Footer />
+        </div>
+        )}
+
         </Router>
 
         <script

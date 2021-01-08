@@ -14,7 +14,10 @@ const addRequestPostAction = (details) => {
       if (res.type === "success") {
         dispatch({
           type: requestPostConstants.REQUESTPOST_CREATE_SUCCESS,
-          profile: res.profile
+          errors: {
+            type: "warning",
+            message: "success",
+          }
         });
       }
       else if (res.type === "error") {
@@ -29,7 +32,6 @@ const addRequestPostAction = (details) => {
     })
   }
 }
-
 
 
 export const requestPostActions = {

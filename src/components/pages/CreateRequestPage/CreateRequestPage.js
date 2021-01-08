@@ -6,23 +6,45 @@ import "./CreateRequestPage.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { requestPostActions } from "../../../_actions";
+import {requestPostConstants} from '../../../_constants'
+import instance from '../../../_helpers/axios'
+import axios from "axios"
 
 const CreateRequestPage = (props) => {
-  const [details, setDetails] = useState({title: "", story: "" , photo: "" , bloodType: "", amount: "", location: "" , phoneNumber: "", closingDate: "", hospital: "" });
+  
+  //data
+  const [title , setTitle] = useState("")
+  const [story , setStory] = useState("")
+  const [bloodType , setBloodType] = useState("")
+  const [amount , setAmount] = useState("")
+  const [location , setLocation] = useState("")
+  const [phoneNumber , setPhoneNumber] = useState("")
+  const [closingDate , setClosingDate] = useState("")
+  const [hospital , setHospital] = useState("")
+  const [photo, setPhoto] = useState('')
+
+  //validation
   const [validated, setValidated] = useState(false);
   const [pageError, setPageError] = useState({});
+
+  //upload
+  const [uploading, setUploading] = useState(false)
+
+  //files
   const {acceptedFiles, getRootProps, getInputProps} = useDropzone();
 
+
+  //state
   const post = useSelector((state) => state.post);
   const dispatch = useDispatch();
 
+  //initial state
   const {errors , success} = post;
-
 
   useEffect(() => {
 
-    if(success === true) {
-      props.history.push()
+    if(success) {
+      props.history.push("/")
     }
 
     if (errors) {
@@ -31,18 +53,50 @@ const CreateRequestPage = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success, props.history, errors, props.location]);
+
   
+  //upload handler
+  const uploadFileHandler = async(e) => {
+
+    const file = e.target.files[0]
+    const formData = new FormData()
+    formData.append('image', file)
+
+    console.log(formData)
+
+    setUploading(true)
+    
+        try{
+          const config = {
+              headers: {
+                  'Content-Type': 'multipart/form-data'
+              }
+          }
+          const {data} = await instance.post('requestPost/uploadPost', formData, config)
+          setPhoto(data)
+
+          setUploading(false)
+
+      } catch(error){
+
+         console.error(error)
+         setUploading(false)
+      }
+  }
 
 
-
+  // files data
   const files = acceptedFiles.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
   ));
 
-  console.log(details)
 
+  //all data
+  const details = {title , story , bloodType , amount , location , phoneNumber , closingDate , hospital , photo}
+
+  // submit
   const handleSubmit = (event) => {
     const form = event.currentTarget;
 
@@ -51,6 +105,7 @@ const CreateRequestPage = (props) => {
 
     dispatch(requestPostActions.addRequestPostAction(details))
   };
+
 
   return (
     <>
@@ -71,17 +126,13 @@ const CreateRequestPage = (props) => {
               <Form.Row>
                 <Form.Group as={Col} md='12' controlId='validationTitle'>
                   <Form.Label className='formLabel'>Title</Form.Label>
-                  <Form.Control type='text' required onChange={(e) =>
-                        setDetails({ ...details, title: e.target.value })
-                      }/>
+                  <Form.Control type='text' required onChange={(e) => setTitle(e.target.value)}/>
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationYourStory'>
                   <Form.Label className='formLabel'>Your Story</Form.Label>
                   <Form.Control required as='textarea' rows={3}
-                  onChange={(e) =>
-                    setDetails({ ...details, story: e.target.value })
-                  } />
+                  onChange={(e) => setStory(e.target.value)}/>
                   <Form.Label className='.textLabel'>
                     Maximum of 1000 words
                   </Form.Label>
@@ -93,7 +144,8 @@ const CreateRequestPage = (props) => {
                   </Form.Label>
                   <section className='dragNdrop'>
                     <div {...getRootProps({ className: "dropzone" })}>
-                      <input {...getInputProps()} />
+                      <input {...getInputProps()}
+                      onChange = {uploadFileHandler} />
                       <div>
                         <svg
                           width='14'
@@ -125,9 +177,7 @@ const CreateRequestPage = (props) => {
 
                 <Form.Group as={Col} md='6' controlId='validationBloodType'>
                   <Form.Label className='formLabel'>Blood Type</Form.Label>
-                  <Form.Control required as='select' onChange={(e) =>
-                        setDetails({ ...details, bloodType: e.target.value })
-                      }>
+                  <Form.Control required as='select' onChange={(e) => setBloodType(e.target.value)}>
                     <option>O+</option>
                     <option>O-</option>
                     <option>A+</option>
@@ -150,17 +200,13 @@ const CreateRequestPage = (props) => {
                     required
                     placeholder='Ex: 1 (Bag)'
                     type='number'
-                    onChange={(e) =>
-                      setDetails({ ...details, amount: e.target.value })
-                    }
+                    onChange={(e) => setAmount(e.target.value)}
                   />
                 </Form.Group>
 
                 <Form.Group as={Col} md='6' controlId='validationCustom05'>
                   <Form.Label className='formLabel'>Mobile Number</Form.Label>
-                  <Form.Control type='number' required onChange={(e) =>
-                        setDetails({ ...details, phoneNumber: e.target.value })
-                      }/>
+                  <Form.Control type='number' required onChange={(e) => setPhoneNumber(e.target.value)}/>
                   <Form.Control.Feedback type='invalid'>
                     Please provide 11 digit mobile number.
                   </Form.Control.Feedback>
@@ -175,25 +221,19 @@ const CreateRequestPage = (props) => {
                       type='date'
                       aria-describedby='inputGroupPrepend'
                       required
-                      onChange={(e) =>
-                        setDetails({ ...details, closingDate: e.target.value })
-                      }
+                      onChange={(e) => setClosingDate(e.target.value)}
                     />
                   </InputGroup>
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationHospital'>
                   <Form.Label className='formLabel'>Hospital</Form.Label>
-                  <Form.Control required type='text' onChange={(e) =>
-                        setDetails({ ...details, hospital: e.target.value })
-                      }/>
+                  <Form.Control required type='text' onChange={(e) => setHospital(e.target.value)}/>
                 </Form.Group>
 
                 <Form.Group as={Col} md='12' controlId='validationLocation'>
                   <Form.Label className='formLabel'>Location</Form.Label>
-                  <Form.Control required type='text' onChange={(e) =>
-                        setDetails({ ...details, location: e.target.value })
-                      }/>
+                  <Form.Control required type='text' onChange={(e) => setLocation(e.target.value)}/>
                 </Form.Group>
               </Form.Row>
               <div className='d-flex buttonGrp'>

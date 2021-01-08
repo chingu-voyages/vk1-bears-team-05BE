@@ -2,7 +2,7 @@ import { requestPostConstants } from "../_constants";
 
 const initialState = {
 
-  post: {},
+  mypost: {},
   posts:{},
   success: false,
   loading: false,
@@ -66,7 +66,7 @@ export const post = (state = initialState, action) => {
     case requestPostConstants.REQUESTPOST_DETAILS_SUCCESS:
       return {
         ...state,
-        posts: action.post,
+        myposts: action.post,
         success:true,
         loading: true,
       };

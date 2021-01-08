@@ -1,28 +1,29 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./ProfilePage.css";
-import {Modal,Button,Form,Col,Nav,Table,Pagination} from "react-bootstrap";
-import { Link } from 'react-router-dom';
+import axios from "axios";
+import {
+  Modal,
+  Button,
+  Form,
+  Col,
+  Nav,
+  Table,
+  Pagination,
+} from "react-bootstrap";
 
-import {profileActions} from '../../../_actions'
+import {profileActions , userActions} from '../../../_actions'
 import { useDispatch, useSelector} from "react-redux";
+import { Link } from 'react-router-dom';
 
 const ProfilePage = () => {
 
+  //state
   const profileData = useSelector((state) => state.profile);
   const auth = useSelector((state) => state.auth);
-  const {user} = auth;
-  const {success, profile} = profileData;
-
-  console.log(profile.photo)
-  console.log(user)
+  const {user, errors , isValid} = auth;
+  const {success, profile , valid } = profileData;
   
   const dispatch = useDispatch();
-
-  useEffect(() => {
-
-
-  }, [success])
-
 
   let pages = [];
   let items = [];
@@ -34,6 +35,45 @@ const ProfilePage = () => {
   const handleShow = () => setShow(true);
 
   const [validated, setValidated] = useState(false);
+
+  const [showTable, setShowTable] = useState(true);
+
+  const [userData, setUserData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [dataPerPage, setDataPerPage] = useState(5);
+
+  // fetching axios
+
+  useEffect(() => {
+
+    dispatch(userActions.findOneUserAction())
+
+  }, []);
+
+
+  useEffect(() => {
+
+
+    dispatch(profileActions.GetprofileAction())
+
+    const fetchData = async () => {
+
+      setLoading(true);
+      const res = await axios.get("https://jsonplaceholder.typicode.com/users");
+      setUserData(res.data);
+
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  //get current data (pagination)
+  const indexOfLastData = currentPage * dataPerPage;
+  const indexOfFirstData = indexOfLastData - dataPerPage;
+  const currentTable = userData.slice(indexOfFirstData, indexOfLastData);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -61,26 +101,32 @@ const ProfilePage = () => {
     );
   }
 
-  for (let number = 1; number <= 4; number++) {
+  currentTable.forEach((user) => {
     items.push(
       <tr>
-        <td>1</td>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-        <td>@mdo</td>
+        <td>{user.id}</td>
+        <td>{user.name}</td>
+        <td>{user.username}</td>
+        <td>{user.email}</td>
+        <td>{user.address.city}</td>
         <td>{result}</td>
       </tr>
     );
-  }
+  });
 
-  for (let number = 1; number <= 5; number++) {
+  for (
+    let number = 1;
+    number <= Math.ceil(userData.length / dataPerPage);
+    number++
+  ) {
     pages.push(
       <Pagination.Item key={number} active={number === active}>
         {number}
       </Pagination.Item>
     );
   }
+
+  console.log(userData.length / dataPerPage);
 
   const paginationBasic = (
     <div>
@@ -90,6 +136,46 @@ const ProfilePage = () => {
         <Pagination.Next />
       </Pagination>
     </div>
+  );
+
+  const selectedKey = (event) => {
+    event === "table1" ? setShowTable(true) : setShowTable(false);
+  };
+
+  const tableData = showTable ? (
+    <>
+      <Table striped bordered hover id='firstTable'>
+        <thead>
+          <tr>
+            <th> tb1 Reference Number</th>
+            <th> tb1 Pledge Blood</th>
+            <th> tb1 Donated Blood</th>
+            <th> tb1 Hospital</th>
+            <th> tb1 Date</th>
+            <th> tb1 Status</th>
+          </tr>
+        </thead>
+        <tbody> {items} </tbody>
+      </Table>
+      <div>{paginationBasic}</div>
+    </>
+  ) : (
+    <>
+      <Table striped bordered hover id='secondTable'>
+        <thead>
+          <tr>
+            <th> tb2 Reference Number</th>
+            <th> tb2 Pledge Blood</th>
+            <th> tb2 Donated Blood</th>
+            <th> tb2 Hospital</th>
+            <th> tb2 Date</th>
+            <th> tb2 Status</th>
+          </tr>
+        </thead>
+        <tbody> {items} </tbody>
+      </Table>
+      <div>{paginationBasic}</div>
+    </>
   );
 
   return (
@@ -104,24 +190,22 @@ const ProfilePage = () => {
               <div className='profileInfoBody d-flex'>
                 <img
                   className='profilePic'
-                  src={profile.photo}
+                  src = {profile.photo}
                   alt='profilepic'
                 />
-                <h3>{user.firstName}  {user.lastName}</h3>
+                <h3>{user.firstName} {user.lastName}</h3>
 
-                <h4>About Me</h4>
+                <h4></h4>
                 <p>
-                  Hi! I’m Shane Smith, to be eligible to donate blood, a person
-                  must be in good health. In general, donors must weigh at least
-                  110 pounds. Most blood banks have no upper age limit. .
+                {profile.userAbout}
                 </p>
               </div>
               <Link to = {`/EditprofilePage/${profile._id}`}>
-                <Button className='editButton' > EDIT PROFILE
-                </Button>
-              </Link>
+                <Button className='editButton' >EDIT PROFILE</Button>
+            </Link>
             </div>
           </div>
+
           <div className='profileDetails'>
             <div className=' d-flex'>
               <div className=' bloodDonation d-flex '>
@@ -209,11 +293,11 @@ const ProfilePage = () => {
                   </div>
                   <div className='basicInfoData'>
                     <ul>
-                      <li>{profile.location}</li>
-                      <li>{user.email}</li>
-                      <li>{user.mobileNumber}</li>
-                      <li>{profile.bloodType}</li>
-                      <li>{profile.lastTimeDonated}</li>
+                      <li>{user.city}   </li>
+                      <li>{user.email}   </li>
+                      <li>{user.mobileNumber}   </li>
+                      <li>{profile.bloodType}   </li>
+                      <li>{profile.lasTimeDonated}   </li>
                     </ul>
                   </div>
                 </div>
@@ -317,33 +401,24 @@ const ProfilePage = () => {
         {/* TABLE */}
 
         <section>
-          <div className='dataTable'>
+          <div>
             <div>
-              <Nav variant='pills' defaultActiveKey='#'>
+              <Nav
+                variant='tabs'
+                defaultActiveKey='table1'
+                onSelect={selectedKey}
+              >
                 <Nav.Item>
-                  <Nav.Link href='#'>Requested Blood</Nav.Link>
+                  <Nav.Link eventKey='table1'>Requested Blood</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey='link-1'>Donated Blood</Nav.Link>
+                  <Nav.Link eventKey='table2'>Donated Blood</Nav.Link>
                 </Nav.Item>
               </Nav>
             </div>
 
             <div>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Reference Number</th>
-                    <th>Pledge Blood</th>
-                    <th>Donated Blood</th>
-                    <th>Hospital</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody> {items} </tbody>
-              </Table>
-              <div>{paginationBasic}</div>
+              <div className='tableSize'>{tableData}</div>
             </div>
           </div>
         </section>

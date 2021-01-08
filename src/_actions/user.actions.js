@@ -95,6 +95,7 @@ const registerAction = (details) => {
   }
 }
 
+// for admin page
 const findAllUserAction = () => {
   return (dispatch) => {
     
